@@ -14,6 +14,7 @@ class XOGame {
         this.initializeElements();
         this.attachEventListeners();
         this.loadGameState();
+        this.loadDarkModePreference();
         this.updateDisplay();
     }
     
@@ -25,6 +26,7 @@ class XOGame {
         this.resetBtn = document.getElementById('resetBtn');
         this.clearScoreBtn = document.getElementById('clearScoreBtn');
         this.clearAllDataBtn = document.getElementById('clearAllDataBtn');
+        this.darkModeToggle = document.getElementById('darkModeToggle');
         this.gameOverModal = document.getElementById('gameOverModal');
         this.gameOverMessage = document.getElementById('gameOverMessage');
         this.playAgainBtn = document.getElementById('playAgainBtn');
@@ -32,7 +34,7 @@ class XOGame {
         // Validate that all required elements exist
         if (!this.cells.length || !this.currentPlayerDisplay || !this.scoreXDisplay || 
             !this.scoreODisplay || !this.resetBtn || !this.clearScoreBtn || 
-            !this.clearAllDataBtn || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
+            !this.clearAllDataBtn || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
             console.error('Required game elements not found in DOM');
             return;
         }
@@ -58,6 +60,7 @@ class XOGame {
         this.resetBtn.addEventListener('click', () => this.resetGame());
         this.clearScoreBtn.addEventListener('click', () => this.clearScores());
         this.clearAllDataBtn.addEventListener('click', () => this.clearAllData());
+        this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
         this.playAgainBtn.addEventListener('click', () => this.resetGame());
         
         // Modal click outside to close
@@ -242,6 +245,27 @@ class XOGame {
         this.updateScores();
         this.updateDisplay();
         this.closeModal();
+    }
+    
+    // Dark mode methods
+    toggleDarkMode() {
+        const body = document.body;
+        const isDarkMode = body.classList.contains('dark-mode');
+        
+        if (isDarkMode) {
+            body.classList.remove('dark-mode');
+            localStorage.setItem('darkMode', 'false');
+        } else {
+            body.classList.add('dark-mode');
+            localStorage.setItem('darkMode', 'true');
+        }
+    }
+    
+    loadDarkModePreference() {
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'true') {
+            document.body.classList.add('dark-mode');
+        }
     }
 }
 

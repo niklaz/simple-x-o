@@ -330,3 +330,142 @@ h1 {
     }
 }
 
+/* Dark Mode Toggle Button */
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.dark-mode-toggle {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.dark-mode-toggle:hover {
+    background: #e9ecef;
+    transform: scale(1.1);
+}
+
+.dark-mode-toggle .sun-icon,
+.dark-mode-toggle .moon-icon {
+    position: absolute;
+    transition: all 0.3s ease;
+}
+
+.dark-mode-toggle .sun-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
+.dark-mode-toggle .moon-icon {
+    opacity: 0;
+    transform: rotate(180deg);
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+}
+
+body.dark-mode .container {
+    background: rgba(30, 30, 46, 0.95);
+    color: #e0e0e0;
+}
+
+body.dark-mode h1 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .score-board {
+    background: #2a2a3e;
+    border: 1px solid #3a3a4e;
+}
+
+body.dark-mode .player {
+    color: #b0b0b0;
+}
+
+body.dark-mode .score-value {
+    color: #64b5f6;
+}
+
+body.dark-mode .game-info p {
+    background: #2a2a3e;
+    color: #e0e0e0;
+    border: 1px solid #3a3a4e;
+}
+
+body.dark-mode .game-board {
+    background: #1a1a2e;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .cell {
+    background: #2a2a3e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .cell:hover {
+    background: #3a3a4e;
+}
+
+body.dark-mode .cell.winning {
+    background: #4caf50;
+    color: white;
+}
+
+body.dark-mode .btn.secondary {
+    background: #2a2a3e;
+    color: #b0b0b0;
+    border: 2px solid #3a3a4e;
+}
+
+body.dark-mode .btn.secondary:hover {
+    background: #3a3a4e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .modal-content {
+    background: #2a2a3e;
+    color: #e0e0e0;
+    border: 1px solid #3a3a4e;
+}
+
+body.dark-mode .modal-content h2 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dark-mode-toggle {
+    background: #2a2a3e;
+    border: 2px solid #3a3a4e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+    background: #3a3a4e;
+}
+
+/* Dark mode toggle animation */
+body.dark-mode .dark-mode-toggle .sun-icon {
+    opacity: 0;
+    transform: rotate(180deg);
+}
+
+body.dark-mode .dark-mode-toggle .moon-icon {
+    opacity: 1;
+    transform: rotate(0deg);
+}
+
