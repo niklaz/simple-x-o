@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-O Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>X-O Game</h1>
+            <div class="score-board">
+                <div class="score">
+                    <span class="player">Player X</span>
+                    <span class="score-value" id="scoreX">0</span>
+                </div>
+                <div class="score">
+                    <span class="player">Player O</span>
+                    <span class="score-value" id="scoreO">0</span>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <div class="game-info">
+                <p id="currentPlayer">Player X's turn</p>
+            </div>
+
+            <div class="game-board" id="gameBoard">
+                <div class="cell" data-index="0"></div>
+                <div class="cell" data-index="1"></div>
+                <div class="cell" data-index="2"></div>
+                <div class="cell" data-index="3"></div>
+                <div class="cell" data-index="4"></div>
+                <div class="cell" data-index="5"></div>
+                <div class="cell" data-index="6"></div>
+                <div class="cell" data-index="7"></div>
+                <div class="cell" data-index="8"></div>
+            </div>
+
+            <div class="game-controls">
+                <button id="resetBtn" class="btn">New Game</button>
+                <button id="clearScoreBtn" class="btn secondary">Clear Score</button>
+            </div>
+        </main>
+
+        <div class="game-over-modal" id="gameOverModal">
+            <div class="modal-content">
+                <h2 id="gameOverMessage">Game Over!</h2>
+                <button id="playAgainBtn" class="btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
