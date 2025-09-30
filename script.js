@@ -4,6 +4,9 @@ class XOGame {
         this.currentPlayer = 'X';
         this.gameActive = true;
         this.scores = { X: 0, O: 0 };
+        this.gameStartTime = null;
+        this.timerInterval = null;
+        this.gameTime = 0;
         
         this.winningCombinations = [
             [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -21,6 +24,7 @@ class XOGame {
     initializeElements() {
         this.cells = document.querySelectorAll('.cell');
         this.currentPlayerDisplay = document.getElementById('currentPlayer');
+        this.gameTimerDisplay = document.getElementById('gameTimer');
         this.scoreXDisplay = document.getElementById('scoreX');
         this.scoreODisplay = document.getElementById('scoreO');
         this.resetBtn = document.getElementById('resetBtn');
@@ -32,7 +36,7 @@ class XOGame {
         this.playAgainBtn = document.getElementById('playAgainBtn');
         
         // Validate that all required elements exist
-        if (!this.cells.length || !this.currentPlayerDisplay || !this.scoreXDisplay || 
+        if (!this.cells.length || !this.currentPlayerDisplay || !this.gameTimerDisplay || !this.scoreXDisplay || 
             !this.scoreODisplay || !this.resetBtn || !this.clearScoreBtn || 
             !this.clearAllDataBtn || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
             console.error('Required game elements not found in DOM');
@@ -82,6 +86,12 @@ class XOGame {
     makeMove(index) {
         this.board[index] = this.currentPlayer;
         this.updateCell(index);
+        
+        // Start timer on first move
+        if (this.gameTime === 0 && !this.gameStartTime) {
+            this.startTimer();
+        }
+        
         this.saveGameState(); // Save after each move
         
         if (this.checkWin()) {
@@ -128,6 +138,7 @@ class XOGame {
     
     handleWin() {
         this.gameActive = false;
+        this.stopTimer();
         this.scores[this.currentPlayer]++;
         this.updateScores();
         this.saveGameState(); // Save after win
@@ -136,6 +147,7 @@ class XOGame {
     
     handleDraw() {
         this.gameActive = false;
+        this.stopTimer();
         this.saveGameState(); // Save after draw
         this.showGameOver("It's a Draw!");
     }
@@ -168,6 +180,7 @@ class XOGame {
         this.board = Array(9).fill('');
         this.currentPlayer = 'X';
         this.gameActive = true;
+        this.resetTimer();
         
         // Clear all cells
         this.cells.forEach(cell => {
@@ -193,7 +206,9 @@ class XOGame {
             board: this.board,
             currentPlayer: this.currentPlayer,
             gameActive: this.gameActive,
-            scores: this.scores
+            scores: this.scores,
+            gameTime: this.gameTime,
+            gameStartTime: this.gameStartTime
         };
         localStorage.setItem('xoGameState', JSON.stringify(gameState));
     }
@@ -207,10 +222,18 @@ class XOGame {
                 this.currentPlayer = gameState.currentPlayer || 'X';
                 this.gameActive = gameState.gameActive !== undefined ? gameState.gameActive : true;
                 this.scores = gameState.scores || { X: 0, O: 0 };
+                this.gameTime = gameState.gameTime || 0;
+                this.gameStartTime = gameState.gameStartTime || null;
                 
                 // Restore the visual state of the board
                 this.restoreBoardVisuals();
                 this.updateScores();
+                this.displayTimer();
+                
+                // Resume timer if game is active and timer was running
+                if (this.gameActive && this.gameStartTime && this.gameTime > 0) {
+                    this.startTimer();
+                }
             }
         } catch (error) {
             console.error('Error loading game state:', error);
@@ -219,6 +242,8 @@ class XOGame {
             this.currentPlayer = 'X';
             this.gameActive = true;
             this.scores = { X: 0, O: 0 };
+            this.gameTime = 0;
+            this.gameStartTime = null;
         }
     }
     
@@ -241,6 +266,7 @@ class XOGame {
         this.currentPlayer = 'X';
         this.gameActive = true;
         this.scores = { X: 0, O: 0 };
+        this.resetTimer();
         this.restoreBoardVisuals();
         this.updateScores();
         this.updateDisplay();
@@ -266,6 +292,45 @@ class XOGame {
         if (savedDarkMode === 'true') {
             document.body.classList.add('dark-mode');
         }
+    }
+    
+    // Timer methods
+    startTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+        }
+        this.gameStartTime = Date.now() - (this.gameTime * 1000);
+        this.timerInterval = setInterval(() => {
+            this.updateTimer();
+        }, 1000);
+    }
+    
+    stopTimer() {
+        if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+        }
+    }
+    
+    updateTimer() {
+        if (this.gameStartTime) {
+            this.gameTime = Math.floor((Date.now() - this.gameStartTime) / 1000);
+            this.displayTimer();
+        }
+    }
+    
+    displayTimer() {
+        const minutes = Math.floor(this.gameTime / 60);
+        const seconds = this.gameTime % 60;
+        const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        this.gameTimerDisplay.textContent = timeString;
+    }
+    
+    resetTimer() {
+        this.stopTimer();
+        this.gameTime = 0;
+        this.gameStartTime = null;
+        this.displayTimer();
     }
 }
 

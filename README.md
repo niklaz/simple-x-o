@@ -9,6 +9,7 @@ A modern, responsive X-O (Tic-Tac-Toe) game built with HTML5, CSS3, and vanilla 
 - **Responsive design**: Adapts to any screen size
 - **Score tracking**: Keep track of wins for both players
 - **Game persistence**: Automatically saves game state and scores across browser sessions
+- **Game timer**: Track how long each game takes with real-time display
 - **Dark mode**: Toggle between light and dark themes with persistent preference
 - **Modern UI**: Beautiful gradient design with smooth animations
 - **Haptic feedback**: Vibration on supported mobile devices
@@ -23,6 +24,7 @@ A modern, responsive X-O (Tic-Tac-Toe) game built with HTML5, CSS3, and vanilla 
 5. Use "Clear Score" to reset the scoreboard
 6. Use "Clear All Data" to reset everything (scores + current game)
 7. Click the 🌙/☀️ button in the top-right to toggle dark mode
+8. Watch the timer to see how fast you can complete each game
 
 ## 💾 Game Persistence
 
@@ -31,6 +33,7 @@ The game automatically saves your progress using browser localStorage:
 - **Scores persist** across browser sessions
 - **Game state is preserved** - you can refresh the page and continue where you left off
 - **Automatic saving** happens after every move, score update, and game reset
+- **Timer persistence** - game timer continues across page refreshes
 - **Data management** options:
   - "Clear Score" - resets only the scoreboard
   - "Clear All Data" - completely resets everything (new game + clear scores)
@@ -52,6 +55,7 @@ For the best mobile experience:
 - **Modern CSS**: Flexbox, Grid, CSS animations, and backdrop-filter
 - **ES6+ JavaScript**: Class-based architecture with modern syntax
 - **localStorage persistence**: Automatic game state and score saving
+- **Real-time timer**: Game timer with persistence across sessions
 - **Dark mode support**: CSS-based theme switching with smooth transitions
 - **Error handling**: Graceful fallback if localStorage is unavailable
 
