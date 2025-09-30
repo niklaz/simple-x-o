@@ -8,6 +8,7 @@ class XOGame {
         this.gameStartTime = null;
         this.timerInterval = null;
         this.gameTime = 0;
+        this.pendingAction = null;
         
         this.winningCombinations = this.generateWinningCombinations(this.boardSize);
         
@@ -32,11 +33,17 @@ class XOGame {
         this.gameOverModal = document.getElementById('gameOverModal');
         this.gameOverMessage = document.getElementById('gameOverMessage');
         this.playAgainBtn = document.getElementById('playAgainBtn');
+        this.confirmationModal = document.getElementById('confirmationModal');
+        this.confirmationTitle = document.getElementById('confirmationTitle');
+        this.confirmationMessage = document.getElementById('confirmationMessage');
+        this.confirmBtn = document.getElementById('confirmBtn');
+        this.cancelBtn = document.getElementById('cancelBtn');
         
         // Validate that all required elements exist
         if (!this.cells.length || !this.currentPlayerDisplay || !this.gameTimerDisplay || !this.scoreXDisplay || 
             !this.scoreODisplay || !this.resetBtn || !this.clearScoreBtn || 
-            !this.clearAllDataBtn || !this.boardSizeSelect || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
+            !this.clearAllDataBtn || !this.boardSizeSelect || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn ||
+            !this.confirmationModal || !this.confirmationTitle || !this.confirmationMessage || !this.confirmBtn || !this.cancelBtn) {
             console.error('Required game elements not found in DOM');
             return;
         }
@@ -59,17 +66,27 @@ class XOGame {
         });
         
         // Button events
-        this.resetBtn.addEventListener('click', () => this.resetGame());
-        this.clearScoreBtn.addEventListener('click', () => this.clearScores());
-        this.clearAllDataBtn.addEventListener('click', () => this.clearAllData());
-        this.boardSizeSelect.addEventListener('change', () => this.changeBoardSize());
+        this.resetBtn.addEventListener('click', () => this.showConfirmation('resetGame', 'New Game', 'Are you sure you want to start a new game? This will reset the current game.'));
+        this.clearScoreBtn.addEventListener('click', () => this.showConfirmation('clearScores', 'Clear Scores', 'Are you sure you want to clear all scores? This action cannot be undone.'));
+        this.clearAllDataBtn.addEventListener('click', () => this.showConfirmation('clearAllData', 'Clear All Data', 'Are you sure you want to clear all data? This will reset the game, scores, and all settings. This action cannot be undone.'));
+        this.boardSizeSelect.addEventListener('change', () => this.showConfirmation('changeBoardSize', 'Change Board Size', 'Are you sure you want to change the board size? This will reset the current game.'));
         this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
         this.playAgainBtn.addEventListener('click', () => this.resetGame());
+        
+        // Confirmation modal events
+        this.confirmBtn.addEventListener('click', () => this.handleConfirmation());
+        this.cancelBtn.addEventListener('click', () => this.closeConfirmationModal());
         
         // Modal click outside to close
         this.gameOverModal.addEventListener('click', (e) => {
             if (e.target === this.gameOverModal) {
                 this.closeModal();
+            }
+        });
+        
+        this.confirmationModal.addEventListener('click', (e) => {
+            if (e.target === this.confirmationModal) {
+                this.closeConfirmationModal();
             }
         });
     }
@@ -407,6 +424,17 @@ class XOGame {
         }
     }
     
+    // Original changeBoardSize method for direct calls (used by confirmation)
+    performBoardSizeChange() {
+        const newSize = parseInt(this.boardSizeSelect.value);
+        if (newSize !== this.boardSize) {
+            this.boardSize = newSize;
+            this.winningCombinations = this.generateWinningCombinations(this.boardSize);
+            this.createBoard();
+            this.resetGame();
+        }
+    }
+    
     createBoard() {
         const gameBoard = document.getElementById('gameBoard');
         gameBoard.innerHTML = '';
@@ -422,6 +450,39 @@ class XOGame {
         // Re-initialize cells and event listeners
         this.initializeElements();
         this.attachEventListeners();
+    }
+    
+    // Confirmation modal methods
+    showConfirmation(action, title, message) {
+        this.pendingAction = action;
+        this.confirmationTitle.textContent = title;
+        this.confirmationMessage.textContent = message;
+        this.confirmationModal.classList.add('show');
+    }
+    
+    closeConfirmationModal() {
+        this.confirmationModal.classList.remove('show');
+        this.pendingAction = null;
+    }
+    
+    handleConfirmation() {
+        if (this.pendingAction) {
+            switch (this.pendingAction) {
+                case 'resetGame':
+                    this.resetGame();
+                    break;
+                case 'clearScores':
+                    this.clearScores();
+                    break;
+                case 'clearAllData':
+                    this.clearAllData();
+                    break;
+                case 'changeBoardSize':
+                    this.performBoardSizeChange();
+                    break;
+            }
+            this.closeConfirmationModal();
+        }
     }
 }
 

@@ -272,7 +272,8 @@ h1 {
 }
 
 /* Modal */
-.game-over-modal {
+.game-over-modal,
+.confirmation-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -286,7 +287,8 @@ h1 {
     backdrop-filter: blur(5px);
 }
 
-.game-over-modal.show {
+.game-over-modal.show,
+.confirmation-modal.show {
     display: flex;
     animation: fadeIn 0.3s ease;
 }
@@ -304,6 +306,24 @@ h1 {
     color: #333;
     margin-bottom: 20px;
     font-size: 1.8rem;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-buttons .btn {
+    min-width: 120px;
 }
 
 @keyframes fadeIn {
@@ -554,6 +574,10 @@ body.dark-mode .modal-content {
 
 body.dark-mode .modal-content h2 {
     color: #e0e0e0;
+}
+
+body.dark-mode .modal-content p {
+    color: #b0b0b0;
 }
 
 body.dark-mode .dark-mode-toggle {

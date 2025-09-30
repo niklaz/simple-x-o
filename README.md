@@ -11,6 +11,7 @@ A modern, responsive X-O (Tic-Tac-Toe) game built with HTML5, CSS3, and vanilla 
 - **Game persistence**: Automatically saves game state and scores across browser sessions
 - **Game timer**: Track how long each game takes with real-time display
 - **Custom board sizes**: Choose from 3x3, 4x4, 5x5, or 6x6 boards
+- **Confirmation dialogs**: Prevents accidental data loss with confirmation modals
 - **Dark mode**: Toggle between light and dark themes with persistent preference
 - **Modern UI**: Beautiful gradient design with smooth animations
 - **Haptic feedback**: Vibration on supported mobile devices
@@ -27,6 +28,7 @@ A modern, responsive X-O (Tic-Tac-Toe) game built with HTML5, CSS3, and vanilla 
 7. Click the 🌙/☀️ button in the top-right to toggle dark mode
 8. Watch the timer to see how fast you can complete each game
 9. Select different board sizes for varied gameplay (3x3 to 6x6)
+10. Confirm destructive actions to prevent accidental data loss
 
 ## 💾 Game Persistence
 
@@ -60,6 +62,7 @@ For the best mobile experience:
 - **localStorage persistence**: Automatic game state and score saving
 - **Real-time timer**: Game timer with persistence across sessions
 - **Dynamic board generation**: Supports multiple board sizes with adaptive win detection
+- **Confirmation system**: Reusable modal system for user confirmations
 - **Dark mode support**: CSS-based theme switching with smooth transitions
 - **Error handling**: Graceful fallback if localStorage is unavailable
 
