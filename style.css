@@ -187,6 +187,52 @@ h1 {
 /* Game controls */
 .game-controls {
     display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.board-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 2px solid #e9ecef;
+}
+
+.board-size-selector label {
+    font-weight: 600;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.board-size-select {
+    padding: 8px 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.board-size-select:hover {
+    border-color: #667eea;
+    transform: translateY(-1px);
+}
+
+.board-size-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.control-buttons {
+    display: flex;
     gap: 15px;
     justify-content: center;
     flex-wrap: wrap;
@@ -474,6 +520,30 @@ body.dark-mode .btn.secondary {
 body.dark-mode .btn.secondary:hover {
     background: #3a3a4e;
     color: #e0e0e0;
+}
+
+body.dark-mode .board-size-selector {
+    background: #2a2a3e;
+    border: 2px solid #3a3a4e;
+}
+
+body.dark-mode .board-size-selector label {
+    color: #b0b0b0;
+}
+
+body.dark-mode .board-size-select {
+    background: #2a2a3e;
+    border: 2px solid #3a3a4e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .board-size-select:hover {
+    border-color: #64b5f6;
+}
+
+body.dark-mode .board-size-select:focus {
+    border-color: #64b5f6;
+    box-shadow: 0 0 0 3px rgba(100, 181, 246, 0.1);
 }
 
 body.dark-mode .modal-content {

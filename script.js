@@ -1,6 +1,7 @@
 class XOGame {
     constructor() {
-        this.board = Array(9).fill('');
+        this.boardSize = 3;
+        this.board = Array(this.boardSize * this.boardSize).fill('');
         this.currentPlayer = 'X';
         this.gameActive = true;
         this.scores = { X: 0, O: 0 };
@@ -8,11 +9,7 @@ class XOGame {
         this.timerInterval = null;
         this.gameTime = 0;
         
-        this.winningCombinations = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6] // Diagonals
-        ];
+        this.winningCombinations = this.generateWinningCombinations(this.boardSize);
         
         this.initializeElements();
         this.attachEventListeners();
@@ -30,6 +27,7 @@ class XOGame {
         this.resetBtn = document.getElementById('resetBtn');
         this.clearScoreBtn = document.getElementById('clearScoreBtn');
         this.clearAllDataBtn = document.getElementById('clearAllDataBtn');
+        this.boardSizeSelect = document.getElementById('boardSize');
         this.darkModeToggle = document.getElementById('darkModeToggle');
         this.gameOverModal = document.getElementById('gameOverModal');
         this.gameOverMessage = document.getElementById('gameOverMessage');
@@ -38,7 +36,7 @@ class XOGame {
         // Validate that all required elements exist
         if (!this.cells.length || !this.currentPlayerDisplay || !this.gameTimerDisplay || !this.scoreXDisplay || 
             !this.scoreODisplay || !this.resetBtn || !this.clearScoreBtn || 
-            !this.clearAllDataBtn || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
+            !this.clearAllDataBtn || !this.boardSizeSelect || !this.darkModeToggle || !this.gameOverModal || !this.gameOverMessage || !this.playAgainBtn) {
             console.error('Required game elements not found in DOM');
             return;
         }
@@ -64,6 +62,7 @@ class XOGame {
         this.resetBtn.addEventListener('click', () => this.resetGame());
         this.clearScoreBtn.addEventListener('click', () => this.clearScores());
         this.clearAllDataBtn.addEventListener('click', () => this.clearAllData());
+        this.boardSizeSelect.addEventListener('change', () => this.changeBoardSize());
         this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
         this.playAgainBtn.addEventListener('click', () => this.resetGame());
         
@@ -177,7 +176,7 @@ class XOGame {
     }
     
     resetGame() {
-        this.board = Array(9).fill('');
+        this.board = Array(this.boardSize * this.boardSize).fill('');
         this.currentPlayer = 'X';
         this.gameActive = true;
         this.resetTimer();
@@ -208,7 +207,8 @@ class XOGame {
             gameActive: this.gameActive,
             scores: this.scores,
             gameTime: this.gameTime,
-            gameStartTime: this.gameStartTime
+            gameStartTime: this.gameStartTime,
+            boardSize: this.boardSize
         };
         localStorage.setItem('xoGameState', JSON.stringify(gameState));
     }
@@ -218,12 +218,24 @@ class XOGame {
             const savedState = localStorage.getItem('xoGameState');
             if (savedState) {
                 const gameState = JSON.parse(savedState);
-                this.board = gameState.board || Array(9).fill('');
+                this.boardSize = gameState.boardSize || 3;
+                this.board = gameState.board || Array(this.boardSize * this.boardSize).fill('');
                 this.currentPlayer = gameState.currentPlayer || 'X';
                 this.gameActive = gameState.gameActive !== undefined ? gameState.gameActive : true;
                 this.scores = gameState.scores || { X: 0, O: 0 };
                 this.gameTime = gameState.gameTime || 0;
                 this.gameStartTime = gameState.gameStartTime || null;
+                
+                // Update board size selector
+                this.boardSizeSelect.value = this.boardSize;
+                
+                // Regenerate winning combinations for the saved board size
+                this.winningCombinations = this.generateWinningCombinations(this.boardSize);
+                
+                // Create board if size changed
+                if (this.boardSize !== 3) {
+                    this.createBoard();
+                }
                 
                 // Restore the visual state of the board
                 this.restoreBoardVisuals();
@@ -238,6 +250,7 @@ class XOGame {
         } catch (error) {
             console.error('Error loading game state:', error);
             // If there's an error, start fresh
+            this.boardSize = 3;
             this.board = Array(9).fill('');
             this.currentPlayer = 'X';
             this.gameActive = true;
@@ -262,7 +275,7 @@ class XOGame {
     
     clearAllData() {
         localStorage.removeItem('xoGameState');
-        this.board = Array(9).fill('');
+        this.board = Array(this.boardSize * this.boardSize).fill('');
         this.currentPlayer = 'X';
         this.gameActive = true;
         this.scores = { X: 0, O: 0 };
@@ -331,6 +344,84 @@ class XOGame {
         this.gameTime = 0;
         this.gameStartTime = null;
         this.displayTimer();
+    }
+    
+    // Board size methods
+    generateWinningCombinations(size) {
+        const combinations = [];
+        
+        // Rows
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j <= size - 3; j++) {
+                const row = [];
+                for (let k = 0; k < 3; k++) {
+                    row.push(i * size + j + k);
+                }
+                combinations.push(row);
+            }
+        }
+        
+        // Columns
+        for (let i = 0; i <= size - 3; i++) {
+            for (let j = 0; j < size; j++) {
+                const col = [];
+                for (let k = 0; k < 3; k++) {
+                    col.push((i + k) * size + j);
+                }
+                combinations.push(col);
+            }
+        }
+        
+        // Diagonals (top-left to bottom-right)
+        for (let i = 0; i <= size - 3; i++) {
+            for (let j = 0; j <= size - 3; j++) {
+                const diag1 = [];
+                for (let k = 0; k < 3; k++) {
+                    diag1.push((i + k) * size + j + k);
+                }
+                combinations.push(diag1);
+            }
+        }
+        
+        // Diagonals (top-right to bottom-left)
+        for (let i = 0; i <= size - 3; i++) {
+            for (let j = 2; j < size; j++) {
+                const diag2 = [];
+                for (let k = 0; k < 3; k++) {
+                    diag2.push((i + k) * size + j - k);
+                }
+                combinations.push(diag2);
+            }
+        }
+        
+        return combinations;
+    }
+    
+    changeBoardSize() {
+        const newSize = parseInt(this.boardSizeSelect.value);
+        if (newSize !== this.boardSize) {
+            this.boardSize = newSize;
+            this.winningCombinations = this.generateWinningCombinations(this.boardSize);
+            this.createBoard();
+            this.resetGame();
+        }
+    }
+    
+    createBoard() {
+        const gameBoard = document.getElementById('gameBoard');
+        gameBoard.innerHTML = '';
+        gameBoard.style.gridTemplateColumns = `repeat(${this.boardSize}, 1fr)`;
+        
+        for (let i = 0; i < this.boardSize * this.boardSize; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'cell';
+            cell.setAttribute('data-index', i);
+            gameBoard.appendChild(cell);
+        }
+        
+        // Re-initialize cells and event listeners
+        this.initializeElements();
+        this.attachEventListeners();
     }
 }
 
