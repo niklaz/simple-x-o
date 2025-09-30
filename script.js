@@ -66,10 +66,10 @@ class XOGame {
         });
         
         // Button events
-        this.resetBtn.addEventListener('click', () => this.showConfirmation('resetGame', 'New Game', 'Are you sure you want to start a new game? This will reset the current game.'));
-        this.clearScoreBtn.addEventListener('click', () => this.showConfirmation('clearScores', 'Clear Scores', 'Are you sure you want to clear all scores? This action cannot be undone.'));
-        this.clearAllDataBtn.addEventListener('click', () => this.showConfirmation('clearAllData', 'Clear All Data', 'Are you sure you want to clear all data? This will reset the game, scores, and all settings. This action cannot be undone.'));
-        this.boardSizeSelect.addEventListener('change', () => this.showConfirmation('changeBoardSize', 'Change Board Size', 'Are you sure you want to change the board size? This will reset the current game.'));
+        this.resetBtn.addEventListener('click', () => this.handleResetGame());
+        this.clearScoreBtn.addEventListener('click', () => this.handleClearScores());
+        this.clearAllDataBtn.addEventListener('click', () => this.handleClearAllData());
+        this.boardSizeSelect.addEventListener('change', () => this.handleBoardSizeChange());
         this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
         this.playAgainBtn.addEventListener('click', () => this.resetGame());
         
@@ -450,6 +450,44 @@ class XOGame {
         // Re-initialize cells and event listeners
         this.initializeElements();
         this.attachEventListeners();
+    }
+    
+    // Game state check methods
+    hasGameStarted() {
+        return this.board.some(cell => cell !== '');
+    }
+    
+    // Smart confirmation handlers
+    handleResetGame() {
+        if (this.hasGameStarted()) {
+            this.showConfirmation('resetGame', 'New Game', 'Are you sure you want to start a new game? This will reset the current game.');
+        } else {
+            this.resetGame();
+        }
+    }
+    
+    handleClearScores() {
+        if (this.scores.X > 0 || this.scores.O > 0) {
+            this.showConfirmation('clearScores', 'Clear Scores', 'Are you sure you want to clear all scores? This action cannot be undone.');
+        } else {
+            this.clearScores();
+        }
+    }
+    
+    handleClearAllData() {
+        if (this.hasGameStarted() || this.scores.X > 0 || this.scores.O > 0) {
+            this.showConfirmation('clearAllData', 'Clear All Data', 'Are you sure you want to clear all data? This will reset the game, scores, and all settings. This action cannot be undone.');
+        } else {
+            this.clearAllData();
+        }
+    }
+    
+    handleBoardSizeChange() {
+        if (this.hasGameStarted()) {
+            this.showConfirmation('changeBoardSize', 'Change Board Size', 'Are you sure you want to change the board size? This will reset the current game.');
+        } else {
+            this.performBoardSizeChange();
+        }
     }
     
     // Confirmation modal methods
