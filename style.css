@@ -79,6 +79,31 @@ h1 {
     background: #e3f2fd;
     border-radius: 25px;
     display: inline-block;
+    margin-bottom: 10px;
+}
+
+.timer-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f0f8ff;
+    border-radius: 20px;
+    border: 2px solid #e3f2fd;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.timer-label {
+    color: #555;
+}
+
+.timer-value {
+    color: #667eea;
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 /* Game board */
@@ -406,6 +431,19 @@ body.dark-mode .game-info p {
     background: #2a2a3e;
     color: #e0e0e0;
     border: 1px solid #3a3a4e;
+}
+
+body.dark-mode .timer-display {
+    background: #2a2a3e;
+    border: 2px solid #3a3a4e;
+}
+
+body.dark-mode .timer-label {
+    color: #b0b0b0;
+}
+
+body.dark-mode .timer-value {
+    color: #64b5f6;
 }
 
 body.dark-mode .game-board {
