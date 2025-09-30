@@ -50,9 +50,20 @@
             </div>
 
             <div class="game-controls">
-                <button id="resetBtn" class="btn">New Game</button>
-                <button id="clearScoreBtn" class="btn secondary">Clear Score</button>
-                <button id="clearAllDataBtn" class="btn secondary">Clear All Data</button>
+                <div class="board-size-selector">
+                    <label for="boardSize">Board Size:</label>
+                    <select id="boardSize" class="board-size-select">
+                        <option value="3">3x3 (Classic)</option>
+                        <option value="4">4x4</option>
+                        <option value="5">5x5</option>
+                        <option value="6">6x6</option>
+                    </select>
+                </div>
+                <div class="control-buttons">
+                    <button id="resetBtn" class="btn">New Game</button>
+                    <button id="clearScoreBtn" class="btn secondary">Clear Score</button>
+                    <button id="clearAllDataBtn" class="btn secondary">Clear All Data</button>
+                </div>
             </div>
         </main>
 
