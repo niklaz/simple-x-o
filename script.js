@@ -299,7 +299,7 @@ class XOGame {
         if (this.timerInterval) {
             clearInterval(this.timerInterval);
         }
-        this.gameStartTime = Date.now();
+        this.gameStartTime = Date.now() - (this.gameTime * 1000);
         this.timerInterval = setInterval(() => {
             this.updateTimer();
         }, 1000);
